@@ -20,7 +20,7 @@ def lambda_handler(event, context):
             ]
         )
 
-        # Adicionando timestamp
+        # Adicionando timestamp na função
         timestamp = datetime.utcnow().replace(microsecond=0).isoformat()
 
         for i in instances.all():
