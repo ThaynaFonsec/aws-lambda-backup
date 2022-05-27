@@ -2,53 +2,62 @@
 
 ## Usando a função lambda com código python.
 
-***Para que você possa em um click, dentro da pataforma aws, criar instances EC2.***
+***Para que você possa diminuir o tamanho da imagem após o upload,
+de forma automática.***
 
 > 1° passo
 
-Criar Key pair na aws no serviço de EC2.
+Criar o bucket de origem e destino.
 
 > 2° passo
 
 Função lambda - com script de permissões definindo:
 
 - CloudWatch Logs
-- EC2
+- S3
 
 ```
 
 {
-  "Version": "2012-10-17",
-  "Statement": [{
-      "Effect": "Allow",
-      "Action": [
-        "logs:CreateLogGroup",
-        "logs:CreateLogStream",
-        "logs:PutLogEvents"
-      ],
-      "Resource": "arn:aws:logs:*:*:*"
-    },
-    {
-      "Action": [
-        "ec2:RunInstances"
-      ],
-      "Effect": "Allow",
-      "Resource": "*"
-    }
-  ]
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
+            ],
+            "Resource": "arn:aws:logs:*:*:*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:GetObject"
+            ],
+            "Resource": "arn:aws:s3:::adicionar-bucket-origem/*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:PutObject"
+            ],
+            "Resource": "arn:aws:s3:::adicionar-bucket-destino/*"
+        }
+    ]
 }
 
 ```
 
-Permitindo as funções.
+Adicionar o Tigger e definir o bucket de origem.
+
 
 > 3° passo
 
-Script em python - componentes da máquina
+Script em python
 
-Variáveis:
+Importar o biblioteca PIL para dentro da função lambda.
 
-- AMI (id da máquina virtual);
-- INSTANCE_TYPE (tipo da máquina - free t2.micro);
-- KEY_NAME (key pairs criado);
-- SUBNET_ID (VPC - subnet);
+Variável:
+
+- DEST_BUCKET (bucket de destino);
