@@ -20,7 +20,6 @@ Função lambda - com script de permissões definindo:
 - EC2
 
 ```
-
 {
   "Version": "2012-10-17",
   "Statement": [{
